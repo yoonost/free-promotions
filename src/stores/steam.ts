@@ -4,7 +4,7 @@ import { sendAllMessages } from '../application'
 import storage from '../libs/storage'
 
 export default class steam {
-    private static storage: storage = new storage('steamAppIds.json')
+    private static storage: storage = new storage('steam.json')
 
     public static async getPromotions (): Promise<void> {
         const browser: Browser = await chromium.launch()
