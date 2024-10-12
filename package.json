@@ -2,8 +2,9 @@
     "name": "free-promotions",
     "version": "1.0.0",
     "scripts": {
-        "production": "rimraf ./dist && npx tsc && node dist/application",
-        "development": "nodemon",
+        "start": "node dist/application",
+        "build": "rimraf ./dist && npx tsc",
+        "dev": "nodemon",
         "lint": "npx eslint ./src",
         "format": "npx eslint ./src --fix"
     },

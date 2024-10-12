@@ -1,5 +1,7 @@
-/.github
 /node_modules
 /.idea
 /dist
+/.github
 /package-lock.json
+/storage/epicAppIds.json
+/storage/steamAppIds.json

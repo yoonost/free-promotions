@@ -2,6 +2,8 @@ import steam from './stores/steam'
 import epicgames from './stores/epicgames'
 import telegram from './messagers/telegram'
 
+console.log('app started')
+
 setInterval((): void => {
     steam.getPromotions().then()
     epicgames.getPromotions().then()
