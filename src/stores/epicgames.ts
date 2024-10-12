@@ -3,7 +3,7 @@ import { sendAllMessages } from '../application'
 import storage from '../libs/storage'
 
 export default class epicgames {
-    private static storage: storage = new storage('epicAppIds.json')
+    private static storage: storage = new storage('epicgames.json')
 
     public static async getPromotions (): Promise<void> {
         const { data }: { data: any } = await axios.get('https://store-site-backend-static-ipv4.ak.epicgames.com/freeGamesPromotions',{ params: { locale: 'ru' } })
