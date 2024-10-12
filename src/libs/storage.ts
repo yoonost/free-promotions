@@ -1,62 +1,44 @@
 import fs from 'fs'
 import path from 'path'
 
-const __filename = 'storage.json'
-const __dirname: string = path.dirname(__filename)
+export default class storage {
+    private filePath: string
+    private appIds: Set<string>
 
-type JSONData = { [key: string]: number }[]
-
-const existsValue = (key: string | number): boolean => {
-    return loadData().some(item => key.toString() in item)
-}
-
-const addValue = (key: string | number, value: number): boolean => {
-    const data = loadData()
-    if (!existsValue(key)) {
-        data.push({ [key.toString()]: value })
-        saveData(data)
-        return true
+    constructor(fileName: string) {
+        this.filePath = path.resolve(`${process.cwd()}/storage`, fileName)
+        this.appIds = this.load()
     }
-    return false
-}
 
-const getValue = (key: string | number): number => {
-    const item = loadData().find(item => key.toString() in item)
-    return item ? item[key.toString()] : 1
-}
-
-const updateValue = (key: string | number, value: number): boolean => {
-    const data = loadData()
-    const index = data.findIndex(item => key.toString() in item)
-    if (index !== -1) {
-        data[index][key.toString()] = value
-        saveData(data)
-        return true
-    }
-    return false
-}
-
-const loadData = (): JSONData => {
-    const filePath = path.join(__dirname, __filename)
-    try {
-        if (!fs.existsSync(filePath)) {
-            fs.writeFileSync(filePath, JSON.stringify([]), 'utf-8')
+    private load(): Set<string> {
+        if (fs.existsSync(this.filePath)) {
+            const fileContent = fs.readFileSync(this.filePath, 'utf-8')
+            const data: string[] = JSON.parse(fileContent)
+            return new Set(data)
         }
-        return JSON.parse(fs.readFileSync(filePath, 'utf-8')) as JSONData
-    } catch (error) {
-        console.error('Error loading data:', error)
-        return []
+        return new Set()
+    }
+
+    public save(): void {
+        const arrayData = Array.from(this.appIds)
+        fs.writeFileSync(this.filePath, JSON.stringify(arrayData, null, 2), 'utf-8')
+    }
+
+    public addAppId(appId: string): void {
+        this.appIds.add(appId)
+        this.save()
+    }
+
+    public hasAppId(appId: string): boolean {
+        return this.appIds.has(appId)
+    }
+
+    public removeMissingAppIds(currentAppIds: Set<string>): void {
+        this.appIds.forEach(appId => {
+            if (!currentAppIds.has(appId)) {
+                this.appIds.delete(appId)
+            }
+        })
+        this.save()
     }
 }
-
-const saveData = (data: JSONData): boolean => {
-    try {
-        fs.writeFileSync(path.join(__dirname, __filename), JSON.stringify(data), 'utf-8')
-        return true
-    } catch (error) {
-        console.error('Error saving data:', error)
-        return false
-    }
-}
-
-export { getValue, addValue, updateValue, existsValue }

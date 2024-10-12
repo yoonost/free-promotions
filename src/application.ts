@@ -1,15 +1,18 @@
 import steam from './stores/steam'
+import epicgames from './stores/epicgames'
 import telegram from './messagers/telegram'
 
 setInterval((): void => {
     steam.getPromotions().then()
-}, 5000)
+    epicgames.getPromotions().then()
+}, 1800000)
 
 export function sendAllMessages (
-    id: string,
-    name: string,
     header: string,
+    platform: string,
+    name: string,
+    link: string,
     description: string
 ): void {
-    telegram.sendMessage(id, name, header, description)
+    telegram.sendMessage(header, platform, name, link, description)
 }
