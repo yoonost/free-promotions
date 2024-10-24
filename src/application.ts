@@ -2,12 +2,10 @@ import steam from './stores/steam'
 import epicgames from './stores/epicgames'
 import telegram from './messagers/telegram'
 
-console.log('app started')
-
-setInterval((): void => {
+function interval (): void {
     steam.getPromotions().then()
     epicgames.getPromotions().then()
-}, 1800000)
+}
 
 export function sendAllMessages (
     header: string,
@@ -18,3 +16,9 @@ export function sendAllMessages (
 ): void {
     telegram.sendMessage(header, platform, name, link, description)
 }
+
+setInterval((): void => {
+    interval()
+}, 1800)
+
+interval()
